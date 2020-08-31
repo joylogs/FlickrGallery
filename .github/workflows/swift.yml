@@ -1,20 +1,19 @@
 name: Swift
 
 on:
-          push:
-                      branches: [ master ]
-                        pull_request:
-                                    branches: [ master ]
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
-                                    jobs:
-                                              build:
+jobs:
+  build:
 
-                                                          runs-on: macos-latest
+    runs-on: macos-latest
 
-                                                              steps:
-                                                                          - uses: actions/checkout@v2
-                                                                          - name: Build
-                                                                                        run: set -o pipefail && xcodebuild clean -scheme $SCHEME -destination $DESTINATION -derivedDataPath $DERIVED_DATA_PATH build-for-testing
-                                                                                            - name: Run tests
-                                                                                                    run: set -o pipefail && xcodebuild test-without-building -xctestrun $(find . -type f -name "*.xctestrun") -destination "platform=iOS Simulator,name=$DEVICE" -derivedDataPath $DERIVED_DATA_PATH -enableCodeCoverage YES
-
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: sset -o pipefail && xcodebuild clean -scheme $SCHEME -destination $DESTINATION -derivedDataPath $DERIVED_DATA_PATH build-for-testing
+    - name: Run tests
+      run: set -o pipefail && xcodebuild test-without-building -xctestrun $(find . -type f -name "*.xctestrun") -destination "platform=iOS Simulator,name=$DEVICE" -derivedDataPath $DERIVED_DATA_PATH -enableCodeCoverage YES
