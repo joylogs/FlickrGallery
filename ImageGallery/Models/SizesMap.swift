@@ -39,7 +39,7 @@ enum SizeType : String, Codable {
 }
 
 struct SizesMap: Codable {
-    let stat: String
+    let stat: Safe<String>
     let sizes: Sizes
 }
 
