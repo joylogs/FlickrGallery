@@ -1,0 +1,13 @@
+version: "Apple Swift version 5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
+options: "0dc6d4c9da4297510b67ab58032eb0bd"
+build_time: [1598889402, 149688000]
+inputs:
+  "/Users/joy.banerjee/git/FlickrGallery/ImageGallery/Extensions/UIImageView+URL.swift": [9223372036, 854775807]
+  "/Users/joy.banerjee/git/FlickrGallery/ImageGallery/Views/CollectionCell/ImageCollectionCell.swift": [9223372036, 854775807]
+  "/Users/joy.banerjee/git/FlickrGallery/ImageGallery/AppDelegate.swift": [9223372036, 854775807]
+  "/Users/joy.banerjee/git/FlickrGallery/ImageGallery/Views/ImageVC.swift": [9223372036, 854775807]
+  "/Users/joy.banerjee/git/FlickrGallery/ImageGallery/Views/SearchCollectionReusableView.swift": [9223372036, 854775807]
+  "/Users/joy.banerjee/git/FlickrGallery/ImageGallery/Models/PhotosMap.swift": [9223372036, 854775807]
+  "/Users/joy.banerjee/git/FlickrGallery/ImageGallery/Models/SizesMap.swift": [9223372036, 854775807]
+  "/Users/joy.banerjee/git/FlickrGallery/ImageGallery/NetworkRequests/NetworkRequestHandler.swift": [9223372036, 854775807]
+  "/Users/joy.banerjee/git/FlickrGallery/ImageGallery/Extensions/UIViewController+Spinner.swift": [9223372036, 854775807]
