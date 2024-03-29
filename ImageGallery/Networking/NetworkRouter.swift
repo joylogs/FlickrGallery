@@ -8,10 +8,6 @@
 
 import Foundation
 
-struct Test: Codable {
-    
-}
-
 typealias Completion<T> = (_ json: T?, _ error: Error?) -> ()
 
 protocol NetworkBindable {
@@ -23,7 +19,7 @@ struct NetworkRouter<EndPoint: EndPointType>: NetworkBindable {
     func handleAPIRequest<T: Codable>(_ endPoint: EndPoint, _ completion: @escaping Completion<T>) {
         
         if let request = buildRequest(endPoint) {
-            URLSession.shared.dataTask(with: request) { data, urlResponse, error in
+           let urlSessionDataTask = URLSession.shared.dataTask(with: request) { data, urlResponse, error in
                 if let useableData = data {
                     let decoder = JSONDecoder()
                     do {
@@ -35,6 +31,7 @@ struct NetworkRouter<EndPoint: EndPointType>: NetworkBindable {
                     }
                 }
             }
+            urlSessionDataTask.resume()
         }
     }
 }

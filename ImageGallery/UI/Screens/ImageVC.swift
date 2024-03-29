@@ -37,6 +37,10 @@ class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHa
         
         self.title = "Image Gallery"
         makeSearchQuery(with: "kitten")
+        
+        Network.shared.getSearchResult(for: "kitten") { json, error in
+            
+        }
     }
     
     func startRequests(for tag: String) {

@@ -9,23 +9,26 @@
 import Foundation
 
 enum APIEndPoint {
-    case search
+    case search(query: String)
     case getSizes
 }
 
 
 extension APIEndPoint: EndPointType {
+    
     var baseURL: URL {
-        guard let url = URL(string: "https://baseURL.com") else { fatalError("Invalid baseURL") }
+        guard let url = URL(string: "https://api.flickr.com") else { fatalError("Invalid baseURL") }
         return url
     }
+    
     var method: Method {
         return .GET
     }
+    
     var path: String {
         switch self {
-        case .search:
-            return "thisPath"
+        case .search(let query):
+            return "/services/rest/?method=flickr.photos.search&tags=\(query)"
         case .getSizes:
             return "thisPath"
         }
