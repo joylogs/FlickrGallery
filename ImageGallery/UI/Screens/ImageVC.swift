@@ -89,7 +89,7 @@ class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHa
                 networkManager.getSizes(for: photoId, completion: { [unowned self] (json: SizesMap?, error: Error?) in
                     self.sizes = json?.sizes.size
                     
-                    if let sizes = self.sizes, let imageURL = sizes[1].value?.url {
+                    if let sizes = self.sizes, let imageURL = sizes[1].value?.source {
                         print(imageURL)
                         DispatchQueue.main.async(execute: {
                             cell.imgView?.imageFromURL(imageUrl: imageURL)

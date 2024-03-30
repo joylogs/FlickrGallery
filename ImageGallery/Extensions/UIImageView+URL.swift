@@ -40,17 +40,15 @@ extension UIImageView {
                 } else {
                     // No errors found.
                     // if we didn't have a response, so checking for that too.
-                    if let r = response as? HTTPURLResponse {
-//                        print(r, error?.localizedDescription)
+                    if let _ = response as? HTTPURLResponse {
                         if let imageData = data {
                             // converting that Data into an image
                             DispatchQueue.main.async(execute: { () -> Void in
+                                let image = UIImage(data: imageData)
                                 activityIndicator.removeFromSuperview()
                                 
-                                if let image = UIImage(data: imageData) {
-                                    self.image = image
-                                    imageCache.setObject(image, forKey: NSString(string: imageUrl.absoluteString)) //cache it
-                                }
+                                self.image = image
+                                imageCache.setObject(image!, forKey: NSString(string: imageUrl.absoluteString)) //cache it
                             })
                         } else {
                             activityIndicator.removeFromSuperview()
