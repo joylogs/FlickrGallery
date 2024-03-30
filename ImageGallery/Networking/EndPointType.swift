@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Method {
+enum Method: String {
     case GET
     case POST
 }
@@ -16,5 +16,6 @@ enum Method {
 protocol EndPointType {
     var baseURL: URL { get }
     var path: String { get }
-    var method: Method { get }
+    var method: Method { get }    
+    var apiKey: String { get }
 }

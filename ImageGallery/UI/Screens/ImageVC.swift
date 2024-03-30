@@ -13,6 +13,7 @@ private let reuseIdentifier = "Cell"
 class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHandlerDelegate, UICollectionViewDelegateFlowLayout {
     
     private var networkRequestHandler: NetworkRequestHandler?
+    private var networkManager: NetworkManager!
     private var photos: [Safe<Photo>]?
     private var sizes: [Safe<Size>]?
     private let dispatchGroup = DispatchGroup()
@@ -30,27 +31,38 @@ class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHa
         // Register cell classes
         self.collectionView!.register(UINib(nibName: "ImageCollectionCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
 
-        // Do any additional setup after loading the view.
-        
-        networkRequestHandler = NetworkRequestHandler()
-        networkRequestHandler?.delegate = self
+//        // Do any additional setup after loading the view.
+//        
+//        networkRequestHandler = NetworkRequestHandler()
+//        networkRequestHandler?.delegate = self
         
         self.title = "Image Gallery"
-        makeSearchQuery(with: "kitten")
+//        makeSearchQuery(with: "kitten")
         
-        Network.shared.getSearchResult(for: "kitten") { json, error in
-            
-        }
+//        Network.shared.getSearchResult(for: "kitten") { json, error in
+//
+//        }
+//        NetworkManager(dispatchGroup: <#T##DispatchGroup#>)
+        networkManager = NetworkManager(dispatchGroup: dispatchGroup)
+        makeSearchQuery(with: "kitten")
     }
     
     func startRequests(for tag: String) {
         
-        dispatchGroup.enter()
-        networkRequestHandler?.makeSearchRequest(with: tag, dispatchGroup)
-        dispatchGroup.wait()
+//        dispatchGroup.enter()
+//        networkRequestHandler?.makeSearchRequest(with: tag, dispatchGroup)
+//        dispatchGroup.wait()
+        
+        networkManager.getSearchResult(with: tag, completion: { [unowned self] (json: PhotosMap?, error: Error?) in
+            self.photos = json?.photos.photo
+            UIViewController.removeSpinner(spinner: spinner!)
+            DispatchQueue.main.async{
+                self.collectionView?.reloadData()
+            }
+        })
         
         dispatchGroup.notify(queue: .main) {
-            self.collectionView?.reloadData()
+//            self.collectionView?.reloadData()
         }
     }
 
@@ -74,13 +86,11 @@ class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHa
         if let photos = self.photos {
             let photo = photos[indexPath.row]
             if let photoId = photo.value?.id {
-                dispatchGroup.enter()
-                networkRequestHandler?.getSizes(for: photoId, dispatchGroup, completion: { [unowned self] (sizes : Sizes?) in
-
-                    self.sizes = sizes?.size
-                    if let imageURL = sizes?.size[1].value?.source {
+                networkManager.getSizes(for: photoId, completion: { [unowned self] (json: SizesMap?, error: Error?) in
+                    self.sizes = json?.sizes.size
+                    
+                    if let sizes = self.sizes, let imageURL = sizes[1].value?.url {
                         print(imageURL)
-
                         DispatchQueue.main.async(execute: {
                             cell.imgView?.imageFromURL(imageUrl: imageURL)
                         })
@@ -88,11 +98,6 @@ class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHa
                 })
             }
         }
-//        if let imageURL = self.sizes?[1].value?.source {
-//            print(imageURL)
-//            cell.imgView?.imageFromURL(imageUrl: imageURL)
-//        }
-        
         return cell
     }
 
