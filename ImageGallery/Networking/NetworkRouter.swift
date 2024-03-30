@@ -40,7 +40,9 @@ struct NetworkRouter<EndPoint: EndPointType>: NetworkBindable {
 private extension NetworkRouter {
     func buildRequest(_ endPoint: EndPoint) -> URLRequest? {
         guard let url = URL(string: endPoint.path, relativeTo: endPoint.baseURL) else { return nil }
-        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 100)
+        
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 100)
+        request.httpMethod = endPoint.method.rawValue
         return request
     }
 }

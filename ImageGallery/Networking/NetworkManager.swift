@@ -8,19 +8,30 @@
 
 import Foundation
 
-class Network: NSObject {
-    static var shared = NetworkManager()
-}
+//class Network: NSObject {
+//    static var shared = NetworkManager()
+//}
 
 
 struct NetworkManager {
     private let networkRouter: NetworkRouter<APIEndPoint>
+    private let dispatchGroup: DispatchGroup?
     
-    init(networkRouter: NetworkRouter<APIEndPoint> = .init()) {
+    init(networkRouter: NetworkRouter<APIEndPoint> = .init(), dispatchGroup: DispatchGroup?) {
         self.networkRouter = networkRouter
+        self.dispatchGroup = dispatchGroup
     }
     
-    func getSearchResult(for keyword: String, completion: @escaping Completion<Photos>) {
-        networkRouter.handleAPIRequest(.search, completion)
+    func getSearchResult(with query: String, completion: @escaping Completion<PhotosMap>) {
+        dispatchGroup?.enter()
+        networkRouter.handleAPIRequest(.search(query), completion)
+        dispatchGroup?.leave()
     }
+    
+    func getSizes(for photoID: String, completion: @escaping Completion<SizesMap>) {
+        dispatchGroup?.enter()
+        networkRouter.handleAPIRequest(.getSizes(photoID), completion)
+        dispatchGroup?.leave()
+    }
+    
 }
