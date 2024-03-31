@@ -8,8 +8,6 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
-
 class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHandlerDelegate, UICollectionViewDelegateFlowLayout {
     
     private var networkManager: NetworkManager!
@@ -20,6 +18,8 @@ class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHa
     
     private let imageLength : CGFloat = 150.0
     private let itemsPerRow = 2
+    
+    private let reuseIdentifier = "Cell"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,98 +40,9 @@ class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHa
         })
         
         dispatchGroup.notify(queue: .main) {
-//            self.collectionView?.reloadData()
+            //            self.collectionView?.reloadData()
         }
     }
-
-    // MARK: UICollectionViewDataSource
-
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return self.photos?.count ?? 0
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ImageCollectionCell
-    
-        // Configuring the cell
-        if let photos = self.photos {
-            let photo = photos[indexPath.row]
-            if let photoId = photo.value?.id {
-                networkManager.getSizes(for: photoId, completion: { [unowned self] (json: SizesMap?, error: Error?) in
-                    self.sizes = json?.sizes.size
-                    
-                    if let sizes = self.sizes, let imageURL = sizes[1].value?.source {
-                        print(imageURL)
-                        DispatchQueue.main.async(execute: {
-                            cell.imgView?.imageFromURL(imageUrl: imageURL)
-                        })
-                    }
-                })
-            }
-        }
-        return cell
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        if (kind == UICollectionElementKindSectionHeader) {
-            let headerView =  collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "CollectionViewHeader", for: indexPath) as! SearchCollectionReusableView
-            
-            if let text = headerView.searchBar.text, !text.isEmpty {
-                self.title = text
-            }
-            return headerView
-        }
-        return UICollectionReusableView()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if let size = self.sizes?[1] {
-            if let dimension = (size.value?.height.value ?? size.value?.width.value), let length = Float(dimension) {
-                return CGSize(width: CGFloat(length), height: CGFloat(length))
-            }
-        }
-        return CGSize(width: imageLength, height: imageLength)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout
-                        collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return (self.view.bounds.width - 2*imageLength)/CGFloat(itemsPerRow+1)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let cellInset = (self.view.bounds.width - 2*imageLength)/CGFloat(itemsPerRow+1)
-        return UIEdgeInsets(top: cellInset, left: cellInset, bottom: 0, right: cellInset)
-    }
-    
-    //MARK: UISearchbar delegate
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-    }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-        searchBar.text = ""
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-        makeSearchQuery(with: searchBar.text)
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    }
-    
     
     private func makeSearchQuery(with searchText: String?) {
         
@@ -169,5 +80,91 @@ class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHa
         let alert = UIAlertController(title: "Error", message: "Something went wrong", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: false, completion: nil)
+    }
+}
+
+
+// MARK: UICollectionViewDataSource
+extension ImageVC {
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.photos?.count ?? 0
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ImageCollectionCell
+        
+        // Configuring the cell
+        if let photos = self.photos {
+            let photo = photos[indexPath.row]
+            if let photoId = photo.value?.id {
+                networkManager.getSizes(for: photoId, completion: { [unowned self] (json: SizesMap?, error: Error?) in
+                    self.sizes = json?.sizes.size
+                    
+                    if let sizes = self.sizes, let imageURL = sizes[1].value?.source {
+                        print(imageURL)
+                        DispatchQueue.main.async(execute: {
+                            cell.imgView?.imageFromURL(imageUrl: imageURL)
+                        })
+                    }
+                })
+            }
+        }
+        return cell
+    }
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        if (kind == UICollectionElementKindSectionHeader) {
+            let headerView =  collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "CollectionViewHeader", for: indexPath) as! SearchCollectionReusableView
+            
+            if let text = headerView.searchBar.text, !text.isEmpty {
+                self.title = text
+            }
+            return headerView
+        }
+        return UICollectionReusableView()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if let size = self.sizes?[1] {
+            if let dimension = (size.value?.height.value ?? size.value?.width.value), let length = Float(dimension) {
+                return CGSize(width: CGFloat(length), height: CGFloat(length))
+            }
+        }
+        return CGSize(width: imageLength, height: imageLength)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout
+                        collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return (self.view.bounds.width - 2*imageLength)/CGFloat(itemsPerRow+1)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let cellInset = (self.view.bounds.width - 2*imageLength)/CGFloat(itemsPerRow+1)
+        return UIEdgeInsets(top: cellInset, left: cellInset, bottom: 0, right: cellInset)
+    }
+}
+
+//MARK: UISearchbar delegate
+
+extension ImageVC {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        searchBar.text = ""
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        makeSearchQuery(with: searchBar.text)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     }
 }
