@@ -12,7 +12,6 @@ private let reuseIdentifier = "Cell"
 
 class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHandlerDelegate, UICollectionViewDelegateFlowLayout {
     
-    private var networkRequestHandler: NetworkRequestHandler?
     private var networkManager: NetworkManager!
     private var photos: [Safe<Photo>]?
     private var sizes: [Safe<Size>]?
@@ -24,35 +23,14 @@ class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
         // Register cell classes
         self.collectionView!.register(UINib(nibName: "ImageCollectionCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
-
-//        // Do any additional setup after loading the view.
-//        
-//        networkRequestHandler = NetworkRequestHandler()
-//        networkRequestHandler?.delegate = self
-        
         self.title = "Image Gallery"
-//        makeSearchQuery(with: "kitten")
-        
-//        Network.shared.getSearchResult(for: "kitten") { json, error in
-//
-//        }
-//        NetworkManager(dispatchGroup: <#T##DispatchGroup#>)
         networkManager = NetworkManager(dispatchGroup: dispatchGroup)
         makeSearchQuery(with: "kitten")
     }
     
     func startRequests(for tag: String) {
-        
-//        dispatchGroup.enter()
-//        networkRequestHandler?.makeSearchRequest(with: tag, dispatchGroup)
-//        dispatchGroup.wait()
-        
         networkManager.getSearchResult(with: tag, completion: { [unowned self] (json: PhotosMap?, error: Error?) in
             self.photos = json?.photos.photo
             UIViewController.removeSpinner(spinner: spinner!)
@@ -115,19 +93,6 @@ class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHa
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-//        if let photos = self.photos {
-//            let photo = photos[indexPath.row]
-//            if let photoId = photo.value?.id {
-//                dispatchGroup.enter()
-//                networkRequestHandler?.getSizes(for: photoId, dispatchGroup, completion: { [unowned self] (sizes : Sizes?) in
-//
-//                    self.sizes = sizes?.size
-//
-//                })
-//                dispatchGroup.wait()
-//            }
-//        }
         if let size = self.sizes?[1] {
             if let dimension = (size.value?.height.value ?? size.value?.width.value), let length = Float(dimension) {
                 return CGSize(width: CGFloat(length), height: CGFloat(length))
@@ -136,13 +101,6 @@ class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHa
         return CGSize(width: imageLength, height: imageLength)
     }
     
-    //mUse for interspacing
-//    func collectionView(_ collectionView: UICollectionView,
-//                        layout collectionViewLayout: UICollectionViewLayout,
-//                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//        return (self.view.bounds.width - 2*imageLength)/3
-//    }
-
     func collectionView(_ collectionView: UICollectionView, layout
                         collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
