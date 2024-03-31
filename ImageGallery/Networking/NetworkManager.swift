@@ -8,11 +8,6 @@
 
 import Foundation
 
-//class Network: NSObject {
-//    static var shared = NetworkManager()
-//}
-
-
 struct NetworkManager {
     private let networkRouter: NetworkRouter<APIEndPoint>
     private let dispatchGroup: DispatchGroup?

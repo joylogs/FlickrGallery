@@ -13,9 +13,6 @@ enum APIEndPoint {
     case getSizes(_: String)
 }
 
-//"\(apiHost)/services/rest/?method=flickr.photos.search&api_key=\(apiKey)&tags=\(query)&page=1&format=json&nojsoncallback=1")
-//"\(apiHost)/services/rest/?method=flickr.photos.getSizes&api_key=\(apiKey)&photo_id=\(photoId)&format=json&nojsoncallback=1")
-
 extension APIEndPoint: EndPointType {
     
     var baseURL: URL {
