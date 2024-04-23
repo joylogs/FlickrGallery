@@ -12,7 +12,7 @@ struct NetworkManager {
     private let networkRouter: NetworkRouter<APIEndPoint>
     private let dispatchGroup: DispatchGroup?
     
-    init(networkRouter: NetworkRouter<APIEndPoint> = .init(), dispatchGroup: DispatchGroup?) {
+    init(_ networkRouter: NetworkRouter<APIEndPoint> = .init(), dispatchGroup: DispatchGroup? = nil) {
         self.networkRouter = networkRouter
         self.dispatchGroup = dispatchGroup
     }

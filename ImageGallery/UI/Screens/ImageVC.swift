@@ -23,7 +23,7 @@ class ImageVC: UICollectionViewController, UISearchBarDelegate, NetworkRequestHa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Register cell classes
+        
         self.collectionView!.register(UINib(nibName: "ImageCollectionCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
         self.title = "Image Gallery"
         networkManager = NetworkManager(dispatchGroup: dispatchGroup)
