@@ -14,6 +14,7 @@ protocol NetworkRequestHandlerDelegate: class {
     func gotError(error: Error?)
 }
 
+@available(swift, obsoleted: 1.0, message: "Use the NetworkManager to make network requests")
 class NetworkRequestHandler {
     
     // MARK: - Constants

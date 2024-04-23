@@ -79,9 +79,25 @@
                     <view key="view" contentMode="scaleToFill" id="s2a-Yp-ces">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vfe-rE-yUh">
+                                <rect key="frame" x="20" y="20" width="335" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="dgr-RL-UWz"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="ZbH-Vg-73D"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="vfe-rE-yUh" firstAttribute="top" secondItem="ZbH-Vg-73D" secondAttribute="top" constant="20" id="12o-SU-B1i"/>
+                            <constraint firstItem="vfe-rE-yUh" firstAttribute="leading" secondItem="ZbH-Vg-73D" secondAttribute="leading" constant="20" id="Ay4-Fd-2Pg"/>
+                            <constraint firstItem="ZbH-Vg-73D" firstAttribute="trailing" secondItem="vfe-rE-yUh" secondAttribute="trailing" constant="20" id="sIz-av-Amk"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="imageView" destination="vfe-rE-yUh" id="j4k-1g-8v6"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xWO-sE-lU2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

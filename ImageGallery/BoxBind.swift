@@ -6,14 +6,12 @@
 //  Copyright © 2024 Joy Banerjee. All rights reserved.
 //
 
-import Foundation
+//import Foundation
 
-
-class BoxBind<T> {
+class Bind<T> {
     
-//    typealias boxListener = (T) -> ()
-    
-    var listener: ((T) -> ())?
+    typealias Listener = (T) -> ()
+    var listener: Listener?
     
     var value: T {
         didSet {
@@ -25,32 +23,7 @@ class BoxBind<T> {
         self.value = value
     }
     
-    func bind(_ listener: ((T) -> ())?) {
-        self.listener = listener
-        listener?(value)
-    }
-    
-}
-
-
-
-
-
-class MyBox<T> {
-    
-    var listener: ((T) -> ())?
-    
-    var value: T {
-        didSet {
-            listener?(value)
-        }
-    }
-    
-    init(_ value: T) {
-        self.value = value
-    }
-    
-    func bind(_ listener: ((T) -> ())?) {
+    func bind(_ listener: Listener?) {
         self.listener = listener
         listener?(value)
     }
